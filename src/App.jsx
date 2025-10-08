@@ -3,11 +3,21 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import MainPage from "./page/MainPage/MainPage";
 import PublicRoute from "./routes/PublicRoute";
 import PrivateRoute from "./routes/PrivateRoute";
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { refreshToken } from './store/userThunks';
 
 
 import CustomInput from "./components/CustomInput/CustomInput";
 import { TextField, Button, Box } from '@mui/material';
 function App() {
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(refreshToken()); // проверяем токен при загрузке
+  }, [dispatch]);
+
   return (
     <Router>
       <main className="bg-black w-full h-screen flex items-center justify-center">
@@ -28,6 +38,14 @@ function App() {
                 <CustomForm />
               </PublicRoute>
             } 
+          />
+          <Route
+            path="/resetPassword"
+            element={
+              <PublicRoute>
+                <CustomForm reset/>
+              </PublicRoute>
+            }
           />
           {/* Только для залогиненных */}
           <Route

@@ -5,7 +5,7 @@ import CustomInput from "../CustomInput/CustomInput";
 import { loginUser, registerUser } from "../../store/userThunks";
 import "./CustomForm.scss";
 
-export default function CustomForm({ login }) {
+export default function CustomForm({ login, reset }) {
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.user);
 
@@ -19,19 +19,34 @@ export default function CustomForm({ login }) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+//   const handleSubmit = (e) => {
+//     e.preventDefault();
 
-    if (!login && formData.password !== formData.repeatPassword) {
-      alert("Пароли не совпадают");
-      return;
-    }
+//     if (!login && formData.password !== formData.repeatPassword) {
+//       alert("Пароли не совпадают");
+//       return;
+//     }
 
-    const payload = { email: formData.email, password: formData.password };
-    const action = login ? loginUser(payload) : registerUser(payload);
+//     const payload = { email: formData.email, password: formData.password };
+//     const action = login ? loginUser(payload) : registerUser(payload);
 
-    dispatch(action);
-  };
+//     dispatch(action);
+//   };
+const handleSubmit = (e) => {
+  e.preventDefault();
+
+  if (!login && !reset && formData.password !== formData.repeatPassword) {
+    alert("Пароли не совпадают");
+    return;
+  }
+
+  let action;
+  if (login) action = loginUser({ email: formData.email, password: formData.password });
+  else if (reset) action = resetPassword({ email: formData.email });
+  else action = registerUser({ email: formData.email, password: formData.password });
+
+  dispatch(action);
+};
 
   return (
     <form
@@ -40,38 +55,54 @@ export default function CustomForm({ login }) {
       aria-label={login ? "Форма входа" : "Форма регистрации"}
     >
       <h1 className="text-2xl font-semibold text-center text-gray-800">
-        {login ? "Вход в аккаунт" : "Регистрация аккаунта"}
+        {login ? "Вход в аккаунт" : reset ? 'Восстановить пароль' : "Регистрация аккаунта"}
       </h1>
 
-      <CustomInput
-        htmlFor="email"
-        title="Email"
-        type="email"
-        id="email"
-        placeholder="example@mail.com"
-        value={formData.email}
-        onChange={handleChange}
-      />
-      <CustomInput
-        htmlFor="password"
-        title="Password"
-        type="password"
-        id="password"
-        placeholder="••••••••"
-        value={formData.password}
-        onChange={handleChange}
-      />
-      {!login && (
-        <CustomInput
-          htmlFor="repeatPassword"
-          title="Repeat password"
-          type="password"
-          id="repeatPassword"
-          placeholder="••••••••"
-          value={formData.repeatPassword}
-          onChange={handleChange}
-        />
-      )}
+        {
+            !reset && <>
+                <CustomInput
+                    htmlFor="email"
+                    title="Email"
+                    type="email"
+                    id="email"
+                    placeholder="example@mail.com"
+                    value={formData.email}
+                    onChange={handleChange}
+                />
+                <CustomInput
+                    htmlFor="password"
+                    title="Password"
+                    type="password"
+                    id="password"
+                    placeholder="••••••••"
+                    value={formData.password}
+                    onChange={handleChange}
+                />
+                {!login && (
+                    <CustomInput
+                    htmlFor="repeatPassword"
+                    title="Repeat password"
+                    type="password"
+                    id="repeatPassword"
+                    placeholder="••••••••"
+                    value={formData.repeatPassword}
+                    onChange={handleChange}
+                    />
+                )}
+            </>
+        }
+        {
+        reset && <CustomInput 
+                htmlFor="email"
+                title="Email"
+                type="email"
+                id="email"
+                placeholder="example@mail.com"
+                value={formData.email}
+                onChange={handleChange}
+                />
+        }
+      
 
       <button
         type="submit"
@@ -82,7 +113,7 @@ export default function CustomForm({ login }) {
           ? "Загрузка..."
           : login
           ? "Войти"
-          : "Зарегистрироваться"}
+          : reset ? 'Восстановить' : "Зарегистрироваться"}
       </button>
 
       {error && (
@@ -98,6 +129,15 @@ export default function CustomForm({ login }) {
           {login ? "Зарегистрироваться" : "Войти"}
         </Link>
       </p>
+      {
+        login && 
+        <p className="text-sm text-center text-gray-600">
+            Забыл пароль?{" "}
+            <Link to={'/resetPassword'} className="text-blue-600 hover:underline">
+                Восстановить
+            </Link>
+        </p>
+      }
     </form>
   );
 }

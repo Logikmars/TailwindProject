@@ -27,3 +27,28 @@ export const registerUser = createAsyncThunk(
     }
   }
 );
+
+// восстановление пароля
+export const resetPassword = createAsyncThunk(
+  "user/resetPassword",
+  async ({ email }, { rejectWithValue }) => {
+    try {
+      const res = await api.post("/user/resetPassword", { email });
+      return res.data.message;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || "Ошибка при сбросе пароля");
+    }
+  }
+);
+
+export const refreshToken = createAsyncThunk(
+  'user/refreshToken',
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await api.get('/user/refresh'); // куки отправляются автоматически
+      return res.data; // { user, accessToken }
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || 'Ошибка обновления токена');
+    }
+  }
+);
