@@ -1,28 +1,59 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { loginUser, registerUser } from "./userThunks";
 
 const initialState = {
-  name: null,
   email: null,
+  token: null,
   isAuth: false,
+  loading: false,
+  error: null,
 };
 
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUser(state, action) {
-      const { name, email } = action.payload;
-      state.name = name;
-      state.email = email;
-      state.isAuth = true;
-    },
     logout(state) {
-      state.name = null;
       state.email = null;
+      state.token = null;
       state.isAuth = false;
     },
   },
+  extraReducers: (builder) => {
+    builder
+      // ----- login -----
+      .addCase(loginUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isAuth = true;
+        state.email = action.payload.email;
+        state.token = action.payload.token;
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // ----- register -----
+      .addCase(registerUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(registerUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isAuth = true;
+        state.email = action.payload.email;
+        state.token = action.payload.token;
+      })
+      .addCase(registerUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+  },
 });
 
-export const { setUser, logout } = userSlice.actions;
+export const { logout } = userSlice.actions;
 export default userSlice.reducer;

@@ -1,12 +1,14 @@
 import './CustomInput.scss';
 
-export default function CustomInput({ htmlFor, title, type, id, placeholder }) {
+export default function CustomInput({ htmlFor, title, type, id, placeholder, value, onChange }) {
   return (
     <div className="relative w-full">
       <input
         type={type}
         id={id}
         name={htmlFor}
+        value={value}
+        onChange={onChange}
         required
         autoComplete={htmlFor}
         placeholder=" "
@@ -23,3 +25,4 @@ export default function CustomInput({ htmlFor, title, type, id, placeholder }) {
     </div>
   );
 }
+
