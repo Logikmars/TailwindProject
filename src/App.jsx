@@ -1,35 +1,52 @@
+import CustomForm from "./components/CustomForm/CustomForm";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import MainPage from "./page/MainPage/MainPage";
+import PublicRoute from "./routes/PublicRoute";
+import PrivateRoute from "./routes/PrivateRoute";
+
+
 import CustomInput from "./components/CustomInput/CustomInput";
 import { TextField, Button, Box } from '@mui/material';
 function App() {
   return (
-    <main className="bg-black w-full h-screen flex items-center justify-center">
-      <form 
-        className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-sm space-y-6"
-        onSubmit={(e) => e.preventDefault()}
-        aria-label="Форма входа"
-      >
-        <h1 className="text-2xl font-semibold text-center text-gray-800">
-          Вход в аккаунт
-        </h1>
-        
-        <CustomInput htmlFor={'email'} title={'Email'} type={'email'} id={'email'} placeholder={'example@mail.com'} />
-        <CustomInput htmlFor={'password'} title={'Password'} type={'password'} id={'password'} placeholder={'••••••••'} />
+    <Router>
+      <main className="bg-black w-full h-screen flex items-center justify-center">
+        <Routes>
+          {/* Только для незалогиненных */}
+          <Route 
+            path="/login" 
+            element={ 
+              <PublicRoute>
+                <CustomForm login />
+              </PublicRoute>
+            } 
+          />
+          <Route 
+            path="/register" 
+            element={
+              <PublicRoute>
+                <CustomForm />
+              </PublicRoute>
+            } 
+          />
+          {/* Только для залогиненных */}
+          <Route
+            path="/"
+            element={
+              <PrivateRoute>
+                <MainPage />
+              </PrivateRoute>
+            }
+          />
+        </Routes>
+      </main>
+    </Router>
+  );
+}
 
-        <button
-          type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg transition-colors cursor-pointer"
-        >
-          Войти
-        </button>
+export default App;
 
-        <p className="text-sm text-center text-gray-600">
-          Нет аккаунта?{" "}
-          <a href="#" className="text-blue-600 hover:underline">
-            Зарегистрироваться
-          </a>
-        </p>
-      </form>
-    </main>
+
 
 // MATERIAL UI(MUI)
     //  <Box
@@ -49,8 +66,3 @@ function App() {
     //     Войти
     //   </Button>
     // </Box>
-
-  );
-}
-
-export default App;
