@@ -7,6 +7,7 @@ const initialState = {
   isAuth: false,
   loading: false,
   error: null,
+  balance: 0,
 };
 
 const userSlice = createSlice({
@@ -17,7 +18,9 @@ const userSlice = createSlice({
       state.email = null;
       state.token = null;
       state.isAuth = false;
-    },
+      state.balance = 0;
+      localStorage.removeItem('accessToken');
+    }
   },
   extraReducers: (builder) => {
     builder
