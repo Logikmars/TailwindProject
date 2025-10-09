@@ -15,7 +15,7 @@ export default function Modal() {
         initial={{ opacity: 0, y: 0 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 0 }}
-        transition={{ duration: 0.1, ease: "easeIn" }}
+        transition={{ duration: 0.3, ease: "easeIn" }}
         className='fixed inset-0 flex justify-center items-center Modal'>
           <div className='bg-white rounded-lg p-6 w-96 flex flex-wrap'>
               <div aria-description='Modal header' className='w-full flex justify-between items-center'>

@@ -16,7 +16,7 @@ export default function CustomInput({ htmlFor, title, type, id, placeholder, val
       />
       <label
         htmlFor={htmlFor}
-        className="absolute left-3 top-2.5 text-gray-500 text-sm transition-all duration-200 
+        className="absolute left-3 top-[-10px] text-gray-500 text-sm transition-all duration-200 
                    peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base
                    peer-focus:top-1 peer-focus:text-xs peer-focus:text-blue-500 bg-white px-1"
       >
