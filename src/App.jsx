@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { refreshToken } from './store/userThunks';
 import { AnimatePresence, motion } from "framer-motion";
+import Modal from "./Modal/Modal";
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -62,6 +63,8 @@ function AnimatedRoutes() {
             }
           />
         </Routes>
+
+        <Modal />
       </motion.div>
     </AnimatePresence>
   );
