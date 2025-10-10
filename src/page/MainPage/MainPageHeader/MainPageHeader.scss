@@ -7,8 +7,14 @@
         p{
             text-align: center;
         }
+        button {
+            width: 140px;
+        }
     }
     &_nav{
-
+        @media(max-width: 750px){
+            flex-direction: column;
+            gap: 10px;
+        }
     }
 }
