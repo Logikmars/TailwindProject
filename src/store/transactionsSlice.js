@@ -1,14 +1,13 @@
 // src/store/transactionsSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import api from '../api/axiosInstance'; // 👈 создадим ниже
+import api from '../api/axiosInstance';
 
-// Асинхронный thunk для отправки транзакции на сервер
 export const sendTransaction = createAsyncThunk(
   'transactions/sendTransaction',
   async (transactionData, { rejectWithValue }) => {
     try {
       const response = await api.post('/transaction/newTransaction', transactionData);
-      return response.data; // возвращаем ответ с бэка
+      return response.data;
     } catch (err) {
       return rejectWithValue(err.response?.data || 'Server error');
     }
@@ -24,10 +23,10 @@ const transactionsSlice = createSlice({
   },
   reducers: {
     addTransactionLocal: (state, action) => {
-      state.list.push({
-        id: Date.now(),
-        ...action.payload,
-      });
+      state.list.push(action.payload);
+    },
+    setTransactions: (state, action) => {
+      state.list = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -38,7 +37,7 @@ const transactionsSlice = createSlice({
       })
       .addCase(sendTransaction.fulfilled, (state, action) => {
         state.loading = false;
-        state.list.push(action.payload); // добавляем то, что пришло с бэка
+        state.list.push(action.payload);
       })
       .addCase(sendTransaction.rejected, (state, action) => {
         state.loading = false;
@@ -47,5 +46,5 @@ const transactionsSlice = createSlice({
   },
 });
 
-export const { addTransactionLocal } = transactionsSlice.actions;
+export const { addTransactionLocal, setTransactions } = transactionsSlice.actions;
 export default transactionsSlice.reducer;

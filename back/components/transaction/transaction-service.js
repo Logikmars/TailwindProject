@@ -2,21 +2,23 @@ const transactionModel = require('./transaction-model');
 
 class TransactionService {
   async postNewTransaction(data) {
-    const { amount, date, description, type, email } = data;
+    const transaction = await transactionModel.create(data);
 
-    const transaction = await transactionModel.create({
-      amount,
-      date,
-      description,
-      type,
-      email,
-    });
-    // тут при добавлении по вебсокету отправлять её на фронт
+    // Отправляем новую транзакцию по WebSocket
+    const ws = global.WS_CLIENTS.get(data.email);
+    if (ws && ws.readyState === 1) {
+      ws.send(JSON.stringify({ type: 'NEW_TRANSACTION', payload: transaction }));
+    }
+
     return transaction;
   }
-    
-    async getAll(userEmail) {
-        // тут получать все транзакции у которых email === userEmail и отдавать по вебскету
+
+  async getAll(userEmail) {
+    const transactions = await transactionModel
+      .find({ email: userEmail })
+      .sort({ date: -1 });
+
+    return transactions;
   }
 }
 
