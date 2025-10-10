@@ -12,6 +12,7 @@ const initialState = {
 
 const userSlice = createSlice({
   name: 'user',
+  email: 'email',
   initialState,
   reducers: {
     logout(state) {
@@ -28,7 +29,7 @@ const userSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.isAuth = true;
-        state.email = action.payload.user.email;
+        state.email = action.payload.user.username;
         state.token = action.payload.accessToken;
       })
       .addCase(loginUser.rejected, (state, action) => { state.loading = false; state.error = action.payload; })
@@ -38,7 +39,7 @@ const userSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
         state.isAuth = true;
-        state.email = action.payload.user.email;
+        state.email = action.payload.user.username;
         state.token = action.payload.accessToken;
       })
       .addCase(registerUser.rejected, (state, action) => { state.loading = false; state.error = action.payload; })
@@ -51,7 +52,7 @@ const userSlice = createSlice({
       // refresh token
       .addCase(refreshToken.fulfilled, (state, action) => {
         state.token = action.payload.accessToken;
-        state.email = action.payload.user.email;
+        state.email = action.payload.user.username;
         state.isAuth = true;
       });
   },

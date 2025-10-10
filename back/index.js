@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const errorMiddleware = require('./errorMiddleware');
 
 const userRouter = require('./components/user/user-router')
+const transactionRouter = require('./components/transaction/transaction-router')
 
 
 const PORT = process.env.PORT || 5000;
@@ -28,7 +29,7 @@ app.use(cors({
 }));
 
 app.use('/user', userRouter);
-
+app.use('/transaction', transactionRouter);
 
 
 app.use(errorMiddleware);
