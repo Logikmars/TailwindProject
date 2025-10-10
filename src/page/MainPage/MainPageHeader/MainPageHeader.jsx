@@ -40,13 +40,13 @@ export default () => {
                 <p>User: {email}</p>
                 <p>Balance: {balance}</p>
             </div>
-            <div className='flex gap-4'>           
+            <nav className='MainPageHeader_nav flex gap-4'>           
                 {
                     btns.map((el, index) => (
                         <button onClick={() => setModal(el.title)} className='p-10 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg transition-colors cursor-pointer disabled:opacity-50' key={`Btn_MainPageHeader_key_${index}`}>{el.title}{" "}{el.symbol}</button>
                     ))
                 }
-            </div>
+            </nav>
             <button onClick={handleLogout} className='p-10 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg transition-colors cursor-pointer disabled:opacity-50'>Logout</button>
         </header>
     )
