@@ -3,6 +3,15 @@ const userService = require('./user-service');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 
+const isProduction = process.env.NODE_ENV === 'production';
+
+const cookieOptions = {
+  httpOnly: true,
+  secure: isProduction ? true : false,
+  sameSite: isProduction ? 'None' : 'Lax',
+  path: '/',
+};
+
 class userController {
 
     async register(req, res, next){
@@ -13,11 +22,7 @@ class userController {
             const userObject = user.toObject();
             delete userObject.password; // убираем пароль
 
-            res.cookie('refreshToken', refreshToken, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production', // https только в проде
-                sameSite: 'Strict'
-            });
+            res.cookie('refreshToken', refreshToken, cookieOptions);
 
             return res.json({ user: userObject, accessToken });
         } catch (e) {
@@ -35,11 +40,7 @@ class userController {
             } = await userService.login(email, password);
             const userObject = user.toObject();
             delete userObject.password;
-            res.cookie('refreshToken', refreshToken, {
-                httpOnly: true,
-                secure: true,
-                sameSite: 'Strict'
-            });
+            res.cookie('refreshToken', refreshToken, cookieOptions);
 
             return res.json({ user: userObject, accessToken });
 
@@ -80,11 +81,7 @@ class userController {
 
             const { accessToken, refreshToken: newRefreshToken } = userService.generateTokens(user);
 
-            res.cookie('refreshToken', newRefreshToken, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'Strict'
-            });
+            res.cookie('refreshToken', newRefreshToken, cookieOptions);
 
             const userObject = user.toObject();
             delete userObject.password;
@@ -93,6 +90,17 @@ class userController {
         } catch (err) {
             next(err);
         }
+    }
+
+    async logout(req, res, next) {
+    try {
+        console.log('Call logout');
+        
+        res.clearCookie('refreshToken', cookieOptions);
+        return res.status(200).json({ message: 'Logged out successfully' });
+    } catch (err) {
+        next(err);
+    }
     }
 }
 

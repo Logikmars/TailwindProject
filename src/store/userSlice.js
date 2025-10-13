@@ -21,6 +21,9 @@ const userSlice = createSlice({
       state.isAuth = false;
       state.balance = 0;
       localStorage.removeItem('accessToken');
+    },
+    updateBalance(state, action) {
+      state.balance = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -31,6 +34,7 @@ const userSlice = createSlice({
         state.isAuth = true;
         state.email = action.payload.user.username;
         state.token = action.payload.accessToken;
+        state.balance = action.payload.user.balance;
       })
       .addCase(loginUser.rejected, (state, action) => { state.loading = false; state.error = action.payload; })
       
@@ -41,6 +45,7 @@ const userSlice = createSlice({
         state.isAuth = true;
         state.email = action.payload.user.username;
         state.token = action.payload.accessToken;
+        state.balance = action.payload.user.balance;
       })
       .addCase(registerUser.rejected, (state, action) => { state.loading = false; state.error = action.payload; })
       
@@ -54,9 +59,9 @@ const userSlice = createSlice({
         state.token = action.payload.accessToken;
         state.email = action.payload.user.username;
         state.isAuth = true;
-      });
+      })
   },
 });
 
-export const { logout } = userSlice.actions;
+export const { logout, updateBalance } = userSlice.actions;
 export default userSlice.reducer;

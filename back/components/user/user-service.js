@@ -6,6 +6,7 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 
 class userService {
+    
 
     async register(email, password){
 
@@ -49,7 +50,8 @@ class userService {
         }
 
         const { accessToken, refreshToken } = this.generateTokens(user);
-
+        console.log(user);
+        
         return {
             user,
             accessToken,

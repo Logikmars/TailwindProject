@@ -52,3 +52,13 @@ export const refreshToken = createAsyncThunk(
     }
   }
 );
+
+export const logoutUser = createAsyncThunk('user/logout', async (_, thunkAPI) => {
+  try {
+    await api.post('/user/logout');
+    return true;
+  } catch (err) {
+    console.error('Ошибка при logout:', err);
+    return thunkAPI.rejectWithValue(err.response?.data || 'Ошибка');
+  }
+});

@@ -1,5 +1,6 @@
 import { useSelector, useDispatch  } from 'react-redux';
 import { logout } from '../../../store/userSlice';
+import { logoutUser } from '../../../store/userThunks';
 import './MainPageHeader.scss';
 import { Navigate } from 'react-router-dom';
 import { openModal } from '../../../store/modalSlice';
@@ -9,9 +10,15 @@ export default () => {
     const balance = useSelector((state) => state.user.balance);
     const email = useSelector((state) => state.user.email);
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        try {
+        await dispatch(logoutUser()).unwrap();
+        } catch (err) {
+        console.error('Ошибка при логауте:', err);
+        } finally {
         dispatch(logout());
-        Navigate('/login');
+        navigate('/login');
+        }
     };
 
     const btns = [
@@ -38,7 +45,7 @@ export default () => {
         <header className='MainPageHeader w-screen flex items-center justify-between p-10 max-w-[1900px]'>
             <div className='flex flex-col'>
                 <p>User: {email}</p>
-                <p>Balance: {balance}</p>
+                <p>Balance: {balance}₴</p>
             </div>
             <nav className='MainPageHeader_nav flex gap-4'>           
                 {

@@ -10,7 +10,7 @@ const errorMiddleware = require('./errorMiddleware');
 const userRouter = require('./components/user/user-router');
 const transactionRouter = require('./components/transaction/transaction-router');
 
-const transactionService = require('./components/transaction/transaction-service');
+// const transactionService = require('./components/transaction/transaction-service');
 
 const PORT = process.env.PORT || 5000;
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
@@ -54,7 +54,7 @@ wss.on('connection', (ws, req) => {
       console.log(`🔴 ${userData.email} disconnected`);
     });
   } catch (err) {
-    console.log('❌ Invalid token');
+    // console.log('❌ Invalid token');
     ws.close();
   }
 });
